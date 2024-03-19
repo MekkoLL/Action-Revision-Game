@@ -38,13 +38,13 @@ class Player(pygame.sprite.Sprite):
 
         if self.rect.x <= 0:
             self.rect.x = 0
-        elif self.rect.x >= DISPLAYW -100:
-            self.rect.x = 580
+        elif self.rect.x >= DISPLAYW:
+            self.rect.x = DISPLAYW -25
 
         if self.rect.y <= 0:
             self.rect.y = 0
-        elif self.rect.y >= DISPLAYH - 100:
-            self.rect.y = 580
+        elif self.rect.y >= DISPLAYH:
+            self.rect.y = DISPLAYH - 25    
 
     def move(self):
         self.velX = 0
