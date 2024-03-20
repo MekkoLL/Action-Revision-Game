@@ -1,18 +1,36 @@
 import pygame
 import pygame.math as math
 import random
+
+import pygame.sprite
+
 from config import *
 
 
-# Class that controls the player
-class Player(pygame.sprite.Sprite):
+
+class Base_character(pygame.sprite.Sprite):
     def __init__(self, game, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.pos = pos
+        self.game = game
+
+
+    def update(self):
+        pass
+
+    def move(self):
+        pass
+
+
+# Class that controls the player
+class Player(Base_character):
+
+    def __init__(self, game, pos):
+        super().__init__(game, pos)
         self.pos = pos
         self.game = game
         self._layer = PLAYER_LAYER
-        self.groups = self.game.sprites
-        pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = pygame.Surface([20, 20])
+        self.image = pygame.Surface([21, 24])
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = self.pos.x
@@ -25,9 +43,6 @@ class Player(pygame.sprite.Sprite):
         self.down_pressed = False
         self.speed = 5
 
-    #def draw(self, win):
-       # pygame.draw.rect(win, self.colour, self.rect)
-
     def update(self):
         self.move()
         self.rect.x += self.velX
@@ -39,20 +54,20 @@ class Player(pygame.sprite.Sprite):
         if self.rect.x <= 0:
             self.rect.x = 0
         elif self.rect.x >= DISPLAYW:
-            self.rect.x = DISPLAYW -25
+            self.rect.x = DISPLAYW - 25
 
         if self.rect.y <= 0:
             self.rect.y = 0
         elif self.rect.y >= DISPLAYH:
-            self.rect.y = DISPLAYH - 25    
+            self.rect.y = DISPLAYH - 25
 
     def move(self):
         self.velX = 0
         self.velY = 0
         if self.left_pressed and not self.right_pressed:
-           self.velX = -self.speed
+            self.velX = -self.speed
         if self.right_pressed and not self.left_pressed:
-           self.velX = self.speed
+            self.velX = self.speed
         if self.up_pressed and not self.down_pressed:
             self.velY = -self.speed
         if self.down_pressed and not self.up_pressed:
@@ -62,15 +77,31 @@ class Player(pygame.sprite.Sprite):
         self.pos.y += self.velY
 
         if self.pos.x < 0:
-           self.pos.x = 0
+            self.pos.x = 0
         elif self.pos.x > DISPLAYW:
-           self.pos.x = DISPLAYW
+            self.pos.x = DISPLAYW
         if self.pos.y < 0:
             self.pos.y = 0
         elif self.pos.y > DISPLAYH:
             self.pos.y = DISPLAYH
 
         self.rect = pygame.Rect(int(self.pos.x), int(self.pos.y), 32, 32)
+
+
+
+class Treasure(Base_character):
+        def __init__(self, game):
+            super().__init__(game)
+            self.game = game
+            self._layer = TREASURE_LAYER
+            self.image = pygame.Surface([20, 20])
+            self.image.fill(YELLOW)
+            self.rect = self.image.get_rect()
+            self.x = random.randrange(0, DISPLAYW, 1)
+            self.y = random.randrange(0, DISPLAYH, 1)
+
+            self.rect = pygame.Rect(int(self.x), int(self.y), 20, 20)
+
 
 
 
