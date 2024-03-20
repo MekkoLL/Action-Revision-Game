@@ -19,40 +19,42 @@ class Game:
     def play(self):
         initial_pos = math.Vector2(int(DISPLAYW / 4), int(DISPLAYH / 4))
         self.play = True
-        self.sprites = pygame.sprite.LayeredUpdates()
-        self.blocks = pygame.sprite.LayeredUpdates()
-        self.enemy = pygame.sprite.LayeredUpdates()
         self.player = Player(self, initial_pos)
+        moving_sprites.add(self.player)
+        self.treasure = Treasure(self)
+        static_sprites.add(self.treasure)
 
     def events(self):
-        for event in pygame.event.get():
+               for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.play = False
                 self.run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self.player.left_pressed = True
+                    moving_sprites.left_pressed = True
                 if event.key == pygame.K_RIGHT:
-                    self.player.right_pressed = True
+                    moving_sprites.right_pressed = True
                 if event.key == pygame.K_UP:
-                    self.player.up_pressed = True
+                    moving_sprites.up_pressed = True
                 if event.key == pygame.K_DOWN:
-                    self.player.down_pressed = True
+                    moving_sprites.down_pressed = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
-                    self.player.left_pressed = False
+                    moving_sprites.left_pressed = False
                 if event.key == pygame.K_RIGHT:
-                    self.player.right_pressed = False
+                    moving_sprites.right_pressed = False
                 if event.key == pygame.K_UP:
-                    self.player.up_pressed = False
+                    moving_sprites.up_pressed = False
                 if event.key == pygame.K_DOWN:
-                   self.player.down_pressed = False
+                    moving_sprites.down_pressed = False
 
     def update(self):
-        self.sprites.update()
+       moving_sprites.update()
+       static_sprites.update()
 
     def draw(self):
-        self.sprites.draw(self.window)
+        moving_sprites.draw(self.window)
+        static_sprites.draw(self.window)
         self.clock.tick(FPS)
         pygame.display.update()
 
@@ -60,7 +62,7 @@ class Game:
         background = pygame.image.load('Grass.png')
         while self.play:
             self.events()
-            self.window.fill([255, 255, 255])
+            self.window.fill([105, 218, 73])
             self.window.blit(background, [0, 0])
             self.draw()
             self.update()
@@ -71,6 +73,11 @@ class Game:
 
     def menu(self):
         pass
+     
+
+
+def register_login():
+    pass
 
 
 game = Game()
