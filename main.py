@@ -12,17 +12,15 @@ class Game:
         pygame.display.set_caption('Action!')
         self.clock = pygame.time.Clock()
         self.run = True
-        self.play()
-
-
-
-    def play(self):
         initial_pos = math.Vector2(int(DISPLAYW / 4), int(DISPLAYH / 4))
         self.play = True
-        self.player = Player(self, initial_pos)
-        moving_sprites.add(self.player)
-        self.treasure = Treasure(self)
-        static_sprites.add(self.treasure)
+        self.moving_sprites = pygame.sprite.Group()
+        self.player = Player(self, initial_pos[0], initial_pos[1])
+        self.moving_sprites.add(self.player)
+        self.static_sprites = pygame.sprite.Group()
+        for i in range(15):
+            self.treasure = Treasure(self, (random.randrange(0, DISPLAYW - 25, 6)), (random.randrange(0, DISPLAYH - 25, 6)))
+            self.static_sprites.add(self.treasure)
 
     def events(self):
                for event in pygame.event.get():
@@ -48,16 +46,16 @@ class Game:
                 if event.key == pygame.K_DOWN:
                     moving_sprites.down_pressed = False
 
-    def update(self):
-       moving_sprites.update()
-       static_sprites.update()
+      def update(self):
+        self.player.update()
 
-    def draw(self):
-        moving_sprites.draw(self.window)
-        static_sprites.draw(self.window)
+        def draw(self):
+        self.player.draw(self.window)
+        for sprite in self.static_sprites:
+            sprite.draw(self.window)
         self.clock.tick(FPS)
         pygame.display.update()
-
+            
     def main(self):
         background = pygame.image.load('Grass.png')
         while self.play:
